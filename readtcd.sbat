@@ -1,0 +1,24 @@
+#!/bin/bash
+#SBATCH --job-name=tcd_file_conversion
+#SBATCH --account=tibam
+#SBATCH --partition=standard
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --time=8:00:00
+#SBATCH --mem-per-cpu=64GB
+#SBATCH --mail-user=cummingb@umich.edu
+#SBATCH --mail-type=ALL
+#SBATCH --output=%x-%j
+   
+
+# I recommend using the following lines to write output to indicate your script is working
+if [[ $SLURM_JOB_NODELIST ]] ; then
+   echo "Running on"
+   scontrol show hostnames $SLURM_JOB_NODELIST
+fi
+
+# With SLURM, you can load your modules in the SBATCH script
+module load matlab
+
+#  Put your job commands after this line 
+matlab -nodisplay -nosplash -nodesktop -r "addpath('/nfs/turbo/umms-tibam/cummingb/projects/tcd-ultrasound'); tcd_driver('./dcm', './mat'); exit;"
